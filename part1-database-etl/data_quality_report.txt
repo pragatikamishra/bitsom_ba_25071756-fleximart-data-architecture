@@ -1,0 +1,53 @@
+extraxted les in csv format
+
+customer_raw: 25 rows
+product_raw: 20 rows
+sales_raw: 40 rows
+
+
+customer table:
+
+phone number standardization : 24 rows affected (created a new column 'std_phone' and 1 duplicate row deleted C001 keeping the latest registered record)
+dropped 'phone' column: 24 rows affected
+Add country code prefix: 24 rows affected
+date format to YY-MM-DD: 24 rows affected
+clean extra space from first_name and last_name: 24 rows affected
+dropped missing email records as the schema given for the mysql has email as not null: 5 rows affected
+add surrogate_key (customer_sk): 19 rows affected
+
+
+product table:
+
+renamed the 'price' column to 'unit_price'
+standardized 'category' column to 'title' format: 20 rows affected
+dropped the products where unit_price was missing as the sales table did not have records related to them: 3 rows affected
+cleaned extra space from product name: 17 rows affected
+dropped missing stock_quantity records as the schema given for the mysql has stock_quantity as not null: 1 row affected
+added surrogate_ley (product_sk): 16 rows affected
+
+sales table:
+
+merged (left join) product_raw and sales_raw to get sales table based on unit price to fill in the missing values of the sales_raw.product_id: 40 rows affected
+dropped extra columns from sales 'product_id_x','product_name','category','stock_quantity': 40 rows affected
+date format to YY-MM-DD: 40 rows affected
+dropped missing customer_id and deduplicated records as the schema given for the mysql has customer id in orders table as not null: 3 row affected
+added surrogate_ley (sales_sk): 37 rows affected
+
+
+established the connection to mysql serverto load the data
+
+loaded customers table: 19 rows inserted
+loaded products table : 16 rows inserted
+
+
+orders table:
+
+created orders table to from sales and customer table
+removed all records with missing values
+uploaded to mysql dababase fleximart: 28 rows inserted
+
+order_items table:
+
+created order_items table from orders, customer and product
+removed all records with missing values as contraints are not null 
+uploaded to mysql database fleximart: 26 rows inserted
